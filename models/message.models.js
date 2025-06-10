@@ -27,7 +27,7 @@ const MessageSchema = new mongoose.Schema({
         default: 'sent'
     },
     attachmentUrl: {
-        type: String // Optional for image or file message types
+        type: String 
     },
     isDeleted: {
         type: Boolean,
