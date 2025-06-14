@@ -1,73 +1,82 @@
-import { ref } from 'joi';
-
 const mongoose = require('mongoose');
 
-const OrderSchema = new mongoose.Schema({
-    customer: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref : "User",
-        required: true,
-    },
-    productId: {
+const orderSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true // The user placing the order
+  },
+  products: [
+    {
+      productId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product',
-        required: true,
-    },
-    productName: {
-        type: String,
-        required: true,
-    },
-    quantity: {
+        required: true
+      },
+      quantity: {
         type: Number,
         required: true,
         min: 1
-    },
-    price: {
+      },
+      priceAtPurchase: {
         type: Number,
         required: true,
         min: 0
-    },
-    paymentStatus: {
-        type: String,
-        enum: ['pending', 'paid', 'failed', 'refunded'],
-        default: 'pending'
-    },
-    oredrTime:{
-        type: <time datetime="time"></time>   
-    },
-    totalAmount: {
-        type: Number,
-        required: true,
-        min: 0
-    },
-    shippingAddress: {
-        street: { type: String, required: true },
-        city: { type: String, required: true },
-        state: { type: String, required: true },
-        postalCode: { type: String, required: true },
-        country: { type: String, required: true }
-    },
-    orderDate: {
-        type: Date,
-        default: Date.now
-    },
-    deliveryDate: {
-        type: Date
-    },
-    trackingNumber: {
-        type: String
-    },
-    isCancelled: {
-        type: Boolean,
-        default: false
-    },
-    cancellationReason: {
-        type: String
+      }
     }
-}, {
-    timestamps: true // Adds createdAt and updatedAt automatically
-});
+  ],
+  totalAmount: {
+    type: Number,
+    required: true,
+    min: 0
+  },
+  invoiceNumber: {
+    type: String,
+    unique: true,
+    sparse: true
+  },
+  orderStatus: {
+    type: String,
+    enum: ['pending', 'processing', 'shipped', 'delivered', 'cancelled'],
+    default: 'pending'
+  },
+  paymentStatus: {
+    type: String,
+    enum: ['unpaid', 'paid', 'refund'],
+    default: 'unpaid'
+  },
+  shippingDetails: {
+    addressLine1: { type: String, required: true },
+    addressLine2: { type: String },
+    city: { type: String, required: true },
+    state: { type: String },
+    postalCode: { type: String, required: true },
+    country: { type: String, required: true },
+    phone: { type: String }
+  },
+  trackingNumber: {
+    type: String
+  },
+  shippingCarrier: {
+    type: String
+  },
+  placedAt: {
+    type: Date,
+    default: Date.now
+  },
+  shippedAt: {
+    type: Date
+  },
+  deliveredAt: {
+    type: Date
+  },
+  cancelledAt: {
+    type: Date
+  },
+  refundAt: {
+    type: Date
+  }
+}, { timestamps: true });
 
-const Order = mongoose.model('Order', OrderSchema);
+const Order = mongoose.model('Order', orderSchema);
 module.exports = Order;
-

@@ -1,41 +1,45 @@
 const mongoose = require('mongoose');
 
-const MessageSchema = new mongoose.Schema({
-    sender: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
-    receiver: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
-    messageContent: {
-        type: String,
-        required: true,
-        maxlength: 2000
-    },
-    messageType: {
-        type: String,
-        enum: ['text', 'image', 'file'],
-        default: 'text'
-    },
-    status: {
-        type: String,
-        enum: ['sent', 'delivered', 'read'],
-        default: 'sent'
-    },
-    attachmentUrl: {
-        type: String 
-    },
-    isDeleted: {
-        type: Boolean,
-        default: false
-    }
-}, {
-    timestamps: true
-});
+const messageSchema = new mongoose.Schema({
+  sender: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  receiver: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  content: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  messageType: {
+    type: String,
+    enum: ['text', 'image', 'file'],
+    default: 'text'
+  },
+  mediaUrl: {
+    type: String,
+    default: null
+  },
+  isRead: {
+    type: Boolean,
+    default: false
+  },
+  sentAt: {
+    type: Date,
+    default: Date.now
+  },
+  readAt: {
+    type: Date
+  },
+  conversationId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Conversation'
+  }
+}, { timestamps: true });
 
-const Message = mongoose.model('Message', MessageSchema);
-module.exports = Message;
+module.exports = mongoose.model('Message', messageSchema);
