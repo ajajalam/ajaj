@@ -21,6 +21,7 @@ app.get('/', (req, res) => {
     res.send('Welcome to the API!');
 }
 );
+app.use('/api/auth',authroute);
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 }

@@ -13,7 +13,7 @@ const loginWithEmail = async (email, password) => {
     throw new Error('User is blocked');
   }
 
-  if (!user.isVerifiied) {
+  if (!user.isVerified) {
     throw new Error('Email is not verified');
   }
 
