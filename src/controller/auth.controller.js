@@ -3,14 +3,15 @@ const authService = require('../services/auth.service');
 
 const signupController = async (req, res) => {
   try {
-    const { userName, userEmail, userPassword, userPhone, countryCode } = req.body;
+    const { userName, userEmail, userPassword, userPhone, countryCode,userRole } = req.body;
 
     const { user, accessToken, refreshToken } = await signupService.signupWithEmail({
       userName,
       userEmail,
       userPassword,
       userPhone,
-      countryCode
+      countryCode,
+      userRole
     });
 
     res.status(201).json({
@@ -41,7 +42,25 @@ const loginController = async (req, res) => {
   }
 };
 
+
+const verifyEmail = async (req,res) =>{
+  try{
+    const {userEmail, otp} = req.body;
+    console.log("1st run")
+    const result = await authService.verifyEmail(otp,userEmail);
+    console.log("final run");
+    res.status(200).json({
+      message:"user verified successfully",
+    })
+  }
+  catch(err){
+    console.log("Catched error")
+    res.status(401).json({ error: err.message });res.status(401).json({ error: err.message });
+  }
+}
+
 module.exports = {
   signupController,
-  loginController
+  loginController,
+  verifyEmail
 };

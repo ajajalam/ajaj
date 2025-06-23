@@ -21,6 +21,7 @@ const verifyRefreshToken = (token) => {
   return jwt.verify(token, REFRESH_TOKEN_SECRET);
 };
 
+
 const decodeToken = (token) => {
   return jwt.decode(token);
 };
